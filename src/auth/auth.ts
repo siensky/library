@@ -60,7 +60,7 @@ async function auth(
         }
       } catch (error: any) {
         if(error?.statusCode) throw error
-      -
+      
       }
     }
   );
