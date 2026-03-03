@@ -1,0 +1,5 @@
+{
+  "dir": "migrations",
+  "migrations-table": "schema_migrations",
+  "databaseUrl": "postgres://sienna:secret-library12345@db:5432/library"
+}
