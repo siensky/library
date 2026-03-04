@@ -17,6 +17,8 @@ async function routes(
 
   fastifyServer.register(bookRoutes);
 
+  //login
+
 //   fastifyServer.route({
 //     method: "GET",
 //     url: "/books",
@@ -29,11 +31,6 @@ async function routes(
 //     handler: () => {},
 //   });
 
-//   fastifyServer.route({
-//     method: "POST",
-//     url: "/add_book",
-//     handler: () => {},
-//   });
 
 //   fastifyServer.route({
 //     method: "PUT",

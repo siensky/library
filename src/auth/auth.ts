@@ -9,7 +9,8 @@ import type {
 import fastifyPlugin from "fastify-plugin";
 import getPublicKey from "./jwks";
 import type { TokenPayload } from "../types/auth";
-import { httpError } from "../error/httpError";
+import { Forbidden, Unauthorized } from "../error/error";
+
 
 // Vi modifierar den inbyggda typen FastifyInstance så att TS vet om att
 // jag har en funktion som heter authenticate på FastifyInstance.
@@ -32,7 +33,7 @@ export async function authenticate(
   try {
     await request.jwtVerify();
   } catch (error) {
-    throw httpError(401, "You are not authorized")
+    throw new Unauthorized("You are not authorized")
   }
 }
 
@@ -56,10 +57,12 @@ async function auth(
         const decodedToken = await request.jwtVerify<TokenPayload>();
         const isAdmin = decodedToken.role?.includes("admin")
         if(!isAdmin){
-            throw httpError(403, "Admin access required")
+            throw new Forbidden("Admin access required")
         }
       } catch (error: any) {
         if(error?.statusCode) throw error
+
+        throw new Unauthorized("Invalid or expired token");
       
       }
     }

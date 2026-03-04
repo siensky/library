@@ -1,18 +1,21 @@
+import { BaseError, InternalError } from "./error";
+
 export default function errorHandler(fastify) {
   fastify.setErrorHandler((error, request, reply) => {
     
-    const statusCode = error.statusCode || 500;
+    if(error instanceof BaseError) {
+      const publicError = error.toPublicError()
 
-    const message =
-    statusCode >= 500 ? "Internal server error" : error.message
+      return reply.status(error.statusCode).send(publicError)
+    }
 
-    reply.code(statusCode).send({
-      success: false,
-      error: {
-        message,
-        statusCode,
-      },
-    });
+    console.error(error)
+
+    const unknownError = new InternalError("Unknown error", error)
+
+    return reply
+    .status(unknownError.statusCode)
+    .send(unknownError.toPublicError())
   });
 }
 
