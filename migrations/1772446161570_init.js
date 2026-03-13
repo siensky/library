@@ -25,7 +25,7 @@ export const up = (pgm) => {
       name text NOT NULL,
       description text
     );
-
+      
     CREATE TABLE books (
       id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
       isbn text NOT NULL,

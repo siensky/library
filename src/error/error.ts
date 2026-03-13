@@ -1,3 +1,7 @@
+//base error ärver från js egna error klass
+// base error klass som ej ska anvädnas utan bara stå som blueprint för dom andra klasserna, 
+//andra klasser ska ärva från den
+
 
 export abstract class BaseError extends Error {
 
@@ -5,7 +9,7 @@ export abstract class BaseError extends Error {
     full_error: unknown;
     params: Record <string, any>
 
-    constructor(message: string, params = {}, full_error = {}) {
+    constructor(message: string, params: Record<string, any> = {}, full_error: unknown = {}) {
         super(message)
             this.params = params
             this.full_error = full_error
@@ -23,7 +27,7 @@ export abstract class BaseError extends Error {
 export class InternalError extends BaseError {
     statusCode = 500
 
-    constructor(message: string = "Internal Service Error", full_error = {}){
+    constructor(message: string = "Internal server Error", full_error = {}){
         super(message,{}, full_error)
     }
 }

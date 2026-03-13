@@ -26,12 +26,10 @@ export type Books = {
 export type Loan = {
     id: string
     book_id: string
-    user_id: string
+    auth0_sub: string
     loaned_at: Date
     due_at: Date
     returned_at: Date | null
-   
-
 
 }
 

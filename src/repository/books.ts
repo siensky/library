@@ -20,7 +20,7 @@ export async function getBookById(id: string): Promise<BookWithAuthor | null> {
     SELECT ${BOOK_FIELDS}
      FROM books b 
      LEFT JOIN authors a ON b.author_id = a.id
-     WHERE id = ${id}
+     WHERE b.id = ${id}
     `;
 
   return result[0] ?? null;
@@ -53,8 +53,8 @@ export async function insertBook(book: Omit<Books, "id"> ): Promise<Books>
 }
 
 
-export async function updateBook(id: string, updateData: Partial<Omit<Books, "id" >>) {
-  const result = await db<BookWithAuthor[]> `
+export async function updateBook(id: string, updateData: Partial<Omit<Books, "id">>) {
+  const result = await db<Books[]> `
     UPDATE books
     SET ${db(updateData)}
     WHERE id = ${id}
@@ -64,7 +64,7 @@ export async function updateBook(id: string, updateData: Partial<Omit<Books, "id
   if(!updatedBook) {
     throw new NotFound("Book not found")
   }
-  return await getBookById(id)
+  return updatedBook
 }
 
 export async function deleteBook(id: string): Promise<void> {

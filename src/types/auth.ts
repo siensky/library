@@ -1,6 +1,6 @@
 export type TokenPayload = {
+    "https://library.com/role"?: "user" | "admin"
     sub: string;
-    role: "user" | "admin";
     type: "access" | "refresh";
     email: string;
     display_name: string;

@@ -4,8 +4,9 @@ import services from "../services";
 import type { Books } from "../types/db";
 import { NotFound } from "../error/error";
 
-export async function getBooks() {
-
+export async function getBooks(_request: FastifyRequest, reply: FastifyReply) {
+  const books = await services.booksServices.getBooks();
+  return reply.code(200).send(books);
 }
 
 export async function getBookById(
@@ -30,15 +31,37 @@ export async function insertBook(
 
   return reply.code(201).send({
     message: "Book successfully added to the library",
-    data: newBook
+    data: newBook,
   });
 }
 
-export async function updateBook() {
+export async function updateBook(
+  request: FastifyRequest<{
+    Params: { id: string };
+    Body: Partial<Omit<Books, "id">>;
+  }>,
+  reply: FastifyReply
+) {
+  const { id } = request.params;
+  const updateData = request.body;
 
+  const book = await services.booksServices.updateBook(id, updateData);
+  return reply.code(200).send({
+    message: "Book successfully updated",
+    data: book,
+  });
 }
 
-export async function deleteBook() {
+export async function deleteBook(
+  request: FastifyRequest<{
+    Params: { id: string };
+  }>,
+  reply: FastifyReply
+) {
+  const { id } = request.params;
 
+  await services.booksServices.deleteBook(id);
+  return reply.code(200).send({
+    message: "Book deleted",
+  });
 }
-

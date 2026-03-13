@@ -11,7 +11,6 @@ import getPublicKey from "./jwks";
 import type { TokenPayload } from "../types/auth";
 import { Forbidden, Unauthorized } from "../error/error";
 
-
 // Vi modifierar den inbyggda typen FastifyInstance så att TS vet om att
 // jag har en funktion som heter authenticate på FastifyInstance.
 declare module "fastify" {
@@ -25,45 +24,46 @@ declare module "fastify" {
 }
 
 
-
-export async function authenticate(
-  request: FastifyRequest,
-  reply: FastifyReply
-) {
-  try {
-    await request.jwtVerify();
-  } catch (error) {
-    throw new Unauthorized("You are not authorized")
-  }
-}
+//verifiera auth0 token med getPublicKey
 
 async function auth(
   fastifyServer: FastifyInstance,
-  options: FastifyPluginOptions
+  _options: FastifyPluginOptions
 ) {
-
   await fastifyServer.register(fastifyJwt, {
-    secret: getPublicKey,
+    secret: getPublicKey as any,
     decode: { complete: true },
   });
 
-  fastifyServer.decorate("authenticate", authenticate)
+  fastifyServer.decorate("authenticate", async (
+    request: FastifyRequest,
+    _reply: FastifyReply
+  ) => {
+    try {
+      await request.jwtVerify();
+    } catch (error) {
+      throw new Unauthorized("You are not authorized");
+    }
+  });
 
-  fastifyServer.adminAuthenticate
+  //gör decorate för att kunna kolla om rollen är user eller admin som jag använder som middleware i routes. 
+
+
   fastifyServer.decorate(
     "adminAuthenticate",
-    async (request: FastifyRequest, reply: FastifyReply) => {
+    async (request: FastifyRequest, _reply: FastifyReply) => {
       try {
         const decodedToken = await request.jwtVerify<TokenPayload>();
-        const isAdmin = decodedToken.role?.includes("admin")
-        if(!isAdmin){
-            throw new Forbidden("Admin access required")
+
+        const userRole = decodedToken["https://library.com/role"]
+
+        if (userRole !== "admin") {
+          throw new Forbidden("Admin access required");
         }
       } catch (error: any) {
-        if(error?.statusCode) throw error
+        if (error.statusCode === 403) throw error;
 
         throw new Unauthorized("Invalid or expired token");
-      
       }
     }
   );
