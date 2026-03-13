@@ -1,13 +1,12 @@
-import fastify from "fastify";
+import fastify, { type FastifyInstance } from "fastify";
 import routes from "./routes/routes";
 import auth from "./auth/auth";
 import errorHandler from "./error/errorHandler";
 import helmet from "@fastify/helmet";
 import cors from "@fastify/cors";
-import { httpError } from "./error/httpError";
 import rateLimit from "@fastify/rate-limit";
 
-const fastifyServer = fastify({ logger: true });
+const fastifyServer: FastifyInstance = fastify({ logger: true });
 
 async function start() {
   await fastifyServer.register(helmet);
@@ -29,7 +28,7 @@ async function start() {
 
   await fastifyServer.listen({
     host: "0.0.0.0",
-    port: 3000,
+    port: 4000,
   });
 }
 
