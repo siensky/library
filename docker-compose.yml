@@ -6,7 +6,7 @@ services:
     env_file:
       - .env
     environment:
-      - DATABASE_URL=postgres://sienna:secret-library12345@db:5432/library
+      - DATABASE_URL=${DATABASE_URL}
     depends_on:
       - db
 
@@ -14,9 +14,9 @@ services:
     image: postgres:15
     restart: always
     environment:
-      - POSTGRES_USER=sienna
-      - POSTGRES_PASSWORD=secret-library12345
-      - POSTGRES_DB=library
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     ports:
       - "5433:5432"
     volumes:
