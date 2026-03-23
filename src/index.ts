@@ -12,7 +12,7 @@ async function start() {
   await fastifyServer.register(helmet);
 
   await fastifyServer.register(cors, {
-    origin: "http://localhost:3000",
+    origin: true,
   });
 
   await fastifyServer.register(rateLimit, {
@@ -26,9 +26,11 @@ async function start() {
 
   await fastifyServer.register(routes);
 
+  const port = Number(process.env.PORT) || 4000;
+
   await fastifyServer.listen({
     host: "0.0.0.0",
-    port: 4000,
+    port,
   });
 }
 
