@@ -12,13 +12,14 @@
     "node-pg-migrate": "^8.0.4"
   },
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "migrate": "node-pg-migrate",
-    "migrate:create": "node-pg-migrate create",
-    "migrate:up": "node-pg-migrate up",
-    "migrate:down": "node-pg-migrate down"
+    "dev": "bun --watch src/index.ts",
+    "test": "bun test",
+    "build": "bun build ./src/index.ts --outdir ./dist --target bun",
+    "start": "bun src/index.ts",
+    "migrate": "node-pg-migrate -j ts",
+    "migrate:create": "bun run migrate create",
+    "migrate:up": "bun run migrate up",
+    "migrate:down": "bun run migrate down"
   },
   "peerDependencies": {
     "typescript": "^5.9.3"

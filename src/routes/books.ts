@@ -1,9 +1,10 @@
-import type { FastifyInstance } from "fastify";
+import type { FastifyInstance} from "fastify";
 import controllers from "../controllers/controllers";
 import { createBookSchema, updateBookSchema } from "../schemas/schemas";
 import type { Books } from "../types/db";
 
 export default async function bookRoutes(fastifyServer: FastifyInstance) {
+
 
   fastifyServer.get("/", controllers.booksControllers.getBooks);
 
@@ -26,7 +27,7 @@ export default async function bookRoutes(fastifyServer: FastifyInstance) {
     { preHandler: [fastifyServer.adminAuthenticate], schema: updateBookSchema },
     controllers.booksControllers.updateBook
   );
-  
+
   fastifyServer.delete<{
     Params: { id: string };
   }>(

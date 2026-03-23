@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifyPluginOptions } from "fastify";
+import type { FastifyInstance, FastifyPluginOptions, FastifyReply, FastifyRequest } from "fastify";
 import bookRoutes from "./books";
 import usersRoutes from "./users";
 import authorRoutes from "./authors";
@@ -25,6 +25,16 @@ async function routes(
   fastifyServer.register(usersRoutes, {prefix: "/users"})
   fastifyServer.register(authorRoutes, {prefix: "/authors"})
   fastifyServer.register(loansRoutes, {prefix: "/loans"})
+
+  fastifyServer.get(
+    "/health",
+    (request: FastifyRequest, reply: FastifyReply) => {
+      reply.send({
+        status: "ok",
+        service: "library",
+      });
+    }
+  );
 
 
 }

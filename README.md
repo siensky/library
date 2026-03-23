@@ -53,6 +53,13 @@ Relationships:
 - Each book is linked to an author
 - Each loan links a book to a user (via Auth0 `sub`)
 
+## Live api
+Public endpoints:
+
+- /health
+- /books
+- /authors
+
 ## Getting Started
 
 Clone the repository:
@@ -60,3 +67,5 @@ Clone the repository:
 ```bash
 git clone https://github.com/siensky/library.git
 cd library
+
+
